@@ -74,5 +74,4 @@ class Simple2DTransformDataset(Dataset):
 def transform(sample):
     # raise NotImplementedError()
     new_sample = np.array([sample[0]*sample[0], sample[1]*sample[1]])  # Transformation as (x**2, y**2)
-    # new_sample = np.array(sample[0]*sample[0] + sample[1]*sample[1])[np.newaxis] # Transformation as (x**2 + y**2)
     return new_sample

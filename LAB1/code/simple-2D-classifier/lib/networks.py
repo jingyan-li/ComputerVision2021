@@ -16,7 +16,6 @@ class LinearClassifier(nn.Module):
         self.layers = nn.Sequential(
             # TODO
             nn.Linear(2, 1, bias=True),  # Transformation as (x**2, y**2)
-            # nn.Linear(1, 1, bias=True),  # Transformation as (x**2 + y**2)
         )
     
     def forward(self, batch):

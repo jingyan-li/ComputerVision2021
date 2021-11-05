@@ -27,8 +27,8 @@ if __name__ == '__main__':
     )
 
     # Create the network.
-    # net = MLPClassifier()
-    net = ConvClassifier()
+    net = MLPClassifier()
+    # net = ConvClassifier()
 
     # Load best checkpoint.
     net.load_state_dict(torch.load(f'best-{net.codename}.pth')['net'])
@@ -50,7 +50,8 @@ if __name__ == '__main__':
         # Get annotated label
         annot_label = batch["annotation"]
         # Fill in the confusion matrix
-        confusion_matrix[predict_label, annot_label] += 1
+        for i in range(len(predict_label)):
+            confusion_matrix[predict_label[i], annot_label[i]] += 1
 
     
     # Plot the confusion_matrix.
@@ -62,6 +63,6 @@ if __name__ == '__main__':
     plt.ylabel('annotation')
     for i in range(10):
         for j in range(10):
-            plt.text(i, j, '%d' % (confusion_matrix[i, j]), ha='center', va='center', color='w', fontsize=12.5)
-    # plt.savefig("confusion_mat.pdf", bbox_inches="tight")
+            plt.text(j, i, '%d' % (confusion_matrix[i, j]), ha='center', va='center', color='w', fontsize=12.5)
+    plt.savefig("confusion_mat_mlp.pdf", bbox_inches="tight")
     plt.show()
