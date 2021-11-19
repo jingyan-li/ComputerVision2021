@@ -9,24 +9,39 @@ def least_square(x,y):
 	# TODO
 	# return the least-squares solution
 	# you can use np.linalg.lstsq
+	A = np.vstack([x, np.ones(x.shape)]).T
+	k, b = np.linalg.lstsq(A, y, rcond=None)[0]
 	return k, b
 
 def num_inlier(x,y,k,b,n_samples,thres_dist):
 	# TODO
 	# compute the number of inliers and a mask that denotes the indices of inliers
-	num = 0
-	mask = np.zeros(x.shape, dtype=bool)
+	dist_mat = np.abs(k * x - y + b) / np.sqrt(k**2)
+	num = np.sum(dist_mat < thres_dist)
+	mask = dist_mat < thres_dist
 
 	return num, mask
 
 def ransac(x,y,iter,n_samples,thres_dist,num_subset):
 	# TODO
-	# ransac
-	k_ransac = None
-	b_ransac = None
-	inlier_mask = None
+	# ransacNone
+	k_ransac = 0
+	b_ransac = 0
 	best_inliers = 0
+	inlier_mask = None
+	for i in range(iter):
+		random_idx = random.sample(list(np.arange(x.shape[0])), num_subset)
+		x_sub = x[random_idx]
+		y_sub = y[random_idx]
 
+		k_ransac_iter, b_ransac_iter = least_square(x_sub, y_sub)
+
+		num, inlier_mask_iter = num_inlier(x, y, k_ransac_iter, b_ransac_iter, n_samples, thres_dist)
+		if num > best_inliers:
+			best_inliers = num
+			k_ransac = k_ransac_iter
+			b_ransac = b_ransac_iter
+			inlier_mask = inlier_mask_iter
 	return k_ransac, b_ransac, inlier_mask
 
 def main():
@@ -78,6 +93,7 @@ def main():
 	plt.legend()
 	plt.xlabel("Input")
 	plt.ylabel("Response")
+	plt.savefig("result.png", bbox_inches = "tight")
 	plt.show()
 
 if __name__ == '__main__':
