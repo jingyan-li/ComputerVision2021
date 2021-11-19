@@ -15,8 +15,8 @@ def EstimateEssentialMatrix(K, im1, im2, matches):
   # Normalize coordinates (to points on the normalized image plane)
 
   # These are the keypoints on the normalized image plane (not to be confused with the normalization in the calibration exercise)
-  normalized_kps1 = 
-  normalized_kps2 = 
+  normalized_kps1 = np.linalg.inv(K) @ im1.kps
+  normalized_kps2 = np.linalg.inv(K) @ im2.kps
 
   # TODO
   # Assemble constraint matrix
@@ -25,6 +25,9 @@ def EstimateEssentialMatrix(K, im1, im2, matches):
   for i in range(matches.shape[0]):
     # TODO
     # Add the constraints
+    [u1, v1] = normalized_kps1[i]
+    [u2, v2] = normalized_kps2[i]
+    constraint_matrix[i] = [u1*u2, v1*u2, u2, u1*v2, v1*v2, v2, u1, v1, 1]
 
   
   # Solve for the nullspace of the constraint matrix
@@ -33,13 +36,14 @@ def EstimateEssentialMatrix(K, im1, im2, matches):
 
   # TODO
   # Reshape the vectorized matrix to it's proper shape again
-  E_hat = 
+  E_hat = vectorized_E_hat.reshape(3,3)
 
   # TODO
   # We need to fulfill the internal constraints of E
   # The first two singular values need to be equal, the third one zero.
   # Since E is up to scale, we can choose the two equal singluar values arbitrarily
-  E = 
+  u,s,vh = np.svd(E_hat)
+  E = (u * np.array([1,1,0])) @ vh
 
   # This is just a quick test that should tell you if your estimated matrix is not correct
   # It might fail if you estimated E in the other direction (i.e. kp2' * E * kp1)
@@ -134,9 +138,9 @@ def TriangulatePoints(K, im1, im2, matches):
   # TODO
   # Filter points behind the cameras by transforming them into each camera space and checking the depth (Z)
   # Make sure to also remove the corresponding rows in `im1_corrs` and `im2_corrs`
-  points3D = 
-  im1_corrs = 
-  im2_corrs =
+  points3D = []
+  im1_corrs = []
+  im2_corrs =[]
 
   return points3D, im1_corrs, im2_corrs
 

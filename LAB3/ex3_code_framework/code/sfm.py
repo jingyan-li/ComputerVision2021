@@ -5,7 +5,8 @@ import numpy as np
 
 from impl.vis import Plot3DPoints
 from impl.sfm.corrs import Find2D3DCorrespondences, GetPairMatches, UpdateReconstructionState
-from impl.sfm.geometry import DecomposeEssentialMatrix, EstimateEssentialMatrix, TriangulatePoints, TriangulateImage, EstimateImagePose
+from impl.sfm.geometry import EstimateEssentialMatrix
+# from impl.sfm.geometry import TriangulatePoints, TriangulateImage, EstimateImagePose, DecomposeEssentialMatrix
 from impl.sfm.image import Image
 from impl.sfm.io import ReadFeatureMatches, ReadKMatrix
 from impl.sfm.vis import PlotImages, PlotWithKeypoints, PlotImagePairMatches, PlotCameras
@@ -16,16 +17,16 @@ def main():
 
   data_folder = '../data'
   image_names = [
-    '0000.png',
-    '0001.png',
-    '0002.png',
-    '0003.png',
-    '0004.png',
-    '0005.png',
-    '0006.png',
-    '0007.png',
-    '0008.png',
-    '0009.png']
+  '0000.png',
+  '0001.png',
+  '0002.png',
+  '0003.png',
+  '0004.png',
+  '0005.png',
+  '0006.png',
+  '0007.png',
+  '0008.png',
+  '0009.png']
 
   # Read images
   images = {}
@@ -41,21 +42,21 @@ def main():
 
   init_images = [3, 4]
 
-  # Visualize images and features
-  # You can comment these lines once you verified that the images are loaded correctly
+  # # Visualize images and features
+  # # You can comment these lines once you verified that the images are loaded correctly
+  #
+  # # Show the images
+  # PlotImages(images)
+  #
+  # # Show the keypoints
+  # for image_name in image_names:
+  #   PlotWithKeypoints(images[image_name])
+  #
+  # # Show the feature matches
+  # for image_pair in itertools.combinations(image_names, 2):
+  #   PlotImagePairMatches(images[image_pair[0]], images[image_pair[1]], matches[(image_pair[0], image_pair[1])])
+  #   gc.collect()
 
-  # Show the images
-  PlotImages(images)
-
-  # Show the keypoints
-  for image_name in image_names:
-    PlotWithKeypoints(images[image_name])
-
-  # Show the feature matches
-  for image_pair in itertools.combinations(image_names, 2):
-    PlotImagePairMatches(images[image_pair[0]], images[image_pair[1]], matches[(image_pair[0], image_pair[1])])
-    gc.collect()
-  
   e_im1_name = image_names[init_images[0]]
   e_im2_name = image_names[init_images[1]]
   e_im1 = images[e_im1_name]
@@ -78,7 +79,7 @@ def main():
 
   # TODO
   # Set the image poses in the images (image.SetPose(...))
-
+  e_im1.SetPose()
 
   # TODO Triangulate initial points
   points3D, im1_corrs, im2_corrs = TriangulatePoints(K, e_im1, e_im2, e_matches)
@@ -140,4 +141,4 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
+   main()
