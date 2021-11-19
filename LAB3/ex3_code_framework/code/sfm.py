@@ -5,7 +5,7 @@ import numpy as np
 
 from impl.vis import Plot3DPoints
 from impl.sfm.corrs import Find2D3DCorrespondences, GetPairMatches, UpdateReconstructionState
-from impl.sfm.geometry import EstimateEssentialMatrix
+from impl.sfm.geometry import EstimateEssentialMatrix, DecomposeEssentialMatrix, TriangulatePoints
 # from impl.sfm.geometry import TriangulatePoints, TriangulateImage, EstimateImagePose, DecomposeEssentialMatrix
 from impl.sfm.image import Image
 from impl.sfm.io import ReadFeatureMatches, ReadKMatrix
@@ -79,8 +79,8 @@ def main():
 
   # TODO
   # Set the image poses in the images (image.SetPose(...))
-  e_im1.SetPose()
-
+  e_im1.SetPose(possible_relative_poses[0][0], possible_relative_poses[0][1])
+  e_im2.SetPose(possible_relative_poses[1][0], possible_relative_poses[1][1])
   # TODO Triangulate initial points
   points3D, im1_corrs, im2_corrs = TriangulatePoints(K, e_im1, e_im2, e_matches)
 

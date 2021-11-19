@@ -15,8 +15,10 @@ def EstimateEssentialMatrix(K, im1, im2, matches):
   # Normalize coordinates (to points on the normalized image plane)
 
   # These are the keypoints on the normalized image plane (not to be confused with the normalization in the calibration exercise)
-  normalized_kps1 = np.linalg.inv(K) @ im1.kps
-  normalized_kps2 = np.linalg.inv(K) @ im2.kps
+  homo1 = MakeHomogeneous(im1.kps.transpose())
+  homo2 = MakeHomogeneous(im2.kps.transpose())
+  normalized_kps1 = (np.linalg.inv(K) @ homo1).transpose()
+  normalized_kps2 = (np.linalg.inv(K) @ homo2).transpose()
 
   # TODO
   # Assemble constraint matrix
@@ -25,9 +27,9 @@ def EstimateEssentialMatrix(K, im1, im2, matches):
   for i in range(matches.shape[0]):
     # TODO
     # Add the constraints
-    [u1, v1] = normalized_kps1[i]
-    [u2, v2] = normalized_kps2[i]
-    constraint_matrix[i] = [u1*u2, v1*u2, u2, u1*v2, v1*v2, v2, u1, v1, 1]
+    ps1 = normalized_kps1[matches[i][0],:]
+    ps2 = normalized_kps2[matches[i][1],:]
+    constraint_matrix[i] = np.outer(ps1, ps2).reshape(-1)
 
   
   # Solve for the nullspace of the constraint matrix
@@ -42,7 +44,7 @@ def EstimateEssentialMatrix(K, im1, im2, matches):
   # We need to fulfill the internal constraints of E
   # The first two singular values need to be equal, the third one zero.
   # Since E is up to scale, we can choose the two equal singluar values arbitrarily
-  u,s,vh = np.svd(E_hat)
+  u,s,vh = np.linalg.svd(E_hat)
   E = (u * np.array([1,1,0])) @ vh
 
   # This is just a quick test that should tell you if your estimated matrix is not correct
@@ -138,9 +140,9 @@ def TriangulatePoints(K, im1, im2, matches):
   # TODO
   # Filter points behind the cameras by transforming them into each camera space and checking the depth (Z)
   # Make sure to also remove the corresponding rows in `im1_corrs` and `im2_corrs`
-  points3D = []
-  im1_corrs = []
-  im2_corrs =[]
+  points3D =
+  im1_corrs =
+  im2_corrs =
 
   return points3D, im1_corrs, im2_corrs
 
@@ -150,7 +152,7 @@ def EstimateImagePose(points2D, points3D, K):
   # We use points in the normalized image plane.
   # This removes the 'K' factor from the projection matrix.
   # We don't normalize the 3D points here to keep the code simpler.
-  normalized_points2D = 
+  normalized_points2D = []
 
   constraint_matrix = BuildProjectionConstraintMatrix(normalized_points2D, points3D)
 
