@@ -66,7 +66,7 @@ def Plot2DPoints(points, image_size, ax=None):
   ax.axis('equal')
   ax.set_title('Image')
 
-  plt.show(block=False)
+  # plt.show(block=False)
 
 
 def PlotProjectedPoints(points3D, points2D, K, R, t, image_size, ax=None):
@@ -83,4 +83,4 @@ def PlotProjectedPoints(points3D, points2D, K, R, t, image_size, ax=None):
   for i in range(num_points):
     ax.plot([p2d[0,i], points2D[i,0]], [image_size[1] - p2d[1,i], image_size[1] - points2D[i,1]], color='g')
 
-  plt.show(block=False)
+  # plt.show(block=False)

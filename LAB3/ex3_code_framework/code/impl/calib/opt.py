@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.optimize as spo
+from impl.calib.geometry import NormalizePoints2D, NormalizePoints3D
 
 from impl.util import MakeHomogeneous, HNormalize
 
@@ -8,8 +9,10 @@ def ReprojectionError(P, point3D, point2D):
     # TODO
     # Project the 3D point into the image and compare it to the keypoint.
     # Make sure to properly normalize homogeneous coordinates.
-    
-    return # TODO
+    homo_point2D = np.concatenate((point2D, [1]), axis=0)
+    homo_point3D = np.matmul(P, np.concatenate((point3D, [1]), axis=0))
+    residual = homo_point2D - homo_point3D/homo_point3D[-1]
+    return residual[:-1]
 
 # Compute the residuals for all correspondences of the image
 def ImageResiduals(P, points2D, points3D):

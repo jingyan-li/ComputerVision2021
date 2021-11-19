@@ -30,8 +30,8 @@ def main():
 
   # TODO
   # Normalize 2D and 3D points
-  normalized_points2D, T2D = 
-  normalized_points3D, T3D = 
+  normalized_points2D, T2D = NormalizePoints2D(points2D, image_size)
+  normalized_points3D, T3D = NormalizePoints3D(points3D)
   
   # TODO
   # Estimate the projection matrix from normalized correspondences
@@ -45,7 +45,7 @@ def main():
 
   # TODO
   # Denormalize P
-  P = 
+  P = np.matmul(np.matmul(np.linalg.inv(T2D), P_hat_opt), T3D)
 
   # TODO
   # Decompose P
