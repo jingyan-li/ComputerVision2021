@@ -7,6 +7,21 @@ class FeatureNet(nn.Module):
     def __init__(self):
         super(FeatureNet, self).__init__()
         # TODO
+        self.relu = nn.ReLU()
+        self.bnorm = nn.BatchNorm2d()
+        self.conv8_1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, stride=1, padding=1)
+        self.conv8_2 = nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1)
+
+
+        self.conv16_1 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=5, stride=2, padding=2)
+        self.conv16_2 = nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1)
+        self.conv16_3 = nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1)
+
+
+        self.conv32_1 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5, stride=2, padding=2)
+        self.conv32_2 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv32_3 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv32_4 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
 
     def forward(self, x):
         # x: [B,3,H,W]
