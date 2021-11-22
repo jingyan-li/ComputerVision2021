@@ -11,21 +11,54 @@ class FeatureNet(nn.Module):
         self.bnorm = nn.BatchNorm2d()
         self.conv8_1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, stride=1, padding=1)
         self.conv8_2 = nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1)
-
+        self.convBlock1 = nn.Sequential(
+            self.conv8_1,
+            self.bnorm,
+            self.relu,
+            self.conv8_2,
+            self.bnorm,
+            self.relu
+        )
 
         self.conv16_1 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=5, stride=2, padding=2)
         self.conv16_2 = nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1)
         self.conv16_3 = nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1)
-
+        self.convBlock2 = nn.Sequential(
+            self.conv16_1,
+            self.bnorm,
+            self.relu,
+            self.conv16_2,
+            self.bnorm,
+            self.relu,
+            self.conv16_3,
+            self.bnorm,
+            self.relu
+        )
 
         self.conv32_1 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5, stride=2, padding=2)
         self.conv32_2 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
         self.conv32_3 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
-        self.conv32_4 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.convBlock3 = nn.Sequential(
+            self.conv32_1,
+            self.bnorm,
+            self.relu,
+            self.conv32_2,
+            self.bnorm,
+            self.relu,
+            self.conv32_3,
+            self.bnorm,
+            self.relu
+        )
+
+        self.convLast = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1)
 
     def forward(self, x):
         # x: [B,3,H,W]
         # TODO
+        out = self.convBlock1(x)
+        out2 = self.convBlock2(out)
+        out3 = self.convBlock3(out2)
+        return self.convLast(out3)
 
 
 class SimlarityRegNet(nn.Module):
