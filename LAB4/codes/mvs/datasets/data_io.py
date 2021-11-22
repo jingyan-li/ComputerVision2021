@@ -3,17 +3,37 @@ import re
 import sys
 from PIL import Image
 
+
 def read_cam_file(filename):
     # TODO
+    intrinsics, extrinsics = [],[]
+    with open(filename,"r") as f:
+        for idx, line in enumerate(f):
+            if 0 < idx < 5:
+                extrinsics.append([float(i) for i in line.replace("\n", "").split(" ")])
+            elif 6 < idx < 10:
+                intrinsics.append([float(i) for i in line.replace("\n", "").split(" ")])
+            elif 10 < idx <= 11:
+                depth_min, depth_max = line.replace("\n", "").split(" ")
+            else:
+                continue
+    intrinsics = np.asarray(intrinsics)
+    extrinsics = np.asarray(extrinsics)
+    depth_min = float(depth_min)
+    depth_max = float(depth_max)
     return intrinsics, extrinsics, depth_min, depth_max
+
 
 def read_img(filename):
     # TODO
+    np_img = np.asarray(Image.open(filename, "r"))/255.
     return np_img
+
 
 def read_depth(filename):
     # read pfm depth file
     return np.array(read_pfm(filename)[0], dtype=np.float32)
+
 
 def read_pfm(filename):
     file = open(filename, 'rb')
