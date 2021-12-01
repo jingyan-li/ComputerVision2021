@@ -10,15 +10,15 @@ def read_cam_file(filename):
     with open(filename,"r") as f:
         for idx, line in enumerate(f):
             if 0 < idx < 5:
-                extrinsics.append([float(i) for i in line.replace("\n", "").split(" ")])
+                extrinsics.append([float(i) for i in line.replace("\n", "").split(" ")[:-1]])
             elif 6 < idx < 10:
-                intrinsics.append([float(i) for i in line.replace("\n", "").split(" ")])
+                intrinsics.append([float(i) for i in line.replace("\n", "").split(" ")[:-1]])
             elif 10 < idx <= 11:
                 depth_min, depth_max = line.replace("\n", "").split(" ")
             else:
                 continue
-    intrinsics = np.asarray(intrinsics)
-    extrinsics = np.asarray(extrinsics)
+    intrinsics = np.asarray(intrinsics, dtype=np.float32)
+    extrinsics = np.asarray(extrinsics, dtype=np.float32)
     depth_min = float(depth_min)
     depth_max = float(depth_max)
     return intrinsics, extrinsics, depth_min, depth_max
@@ -26,7 +26,7 @@ def read_cam_file(filename):
 
 def read_img(filename):
     # TODO
-    np_img = np.asarray(Image.open(filename, "r"))/255.
+    np_img = np.asarray(Image.open(filename, "r"), dtype=np.float32)/255.
     return np_img
 
 
