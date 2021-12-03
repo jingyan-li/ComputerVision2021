@@ -41,6 +41,9 @@ parser.add_argument('--summary_freq', type=int, default=20, help='print and summ
 parser.add_argument('--save_freq', type=int, default=1, help='save checkpoint frequency')
 parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed')
 
+
+parser.add_argument('--cuda', type=bool, default=False, help="use gpu")
+
 # parse arguments and check
 args = parser.parse_args()
 if args.resume:
@@ -52,6 +55,15 @@ if args.testpath is None:
 torch.manual_seed(args.seed)
 torch.cuda.manual_seed(args.seed)
 
+# TODO Use cuda
+CUDA = False
+if torch.cuda.is_available():
+    print("CUDA is available")
+    if not args.cuda:
+        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+    else:
+        CUDA = args.cuda
+print("CUDA: ", CUDA)
 # create logger for mode "train" and "testall"
 if args.mode == "train":
     if not os.path.isdir(args.logdir):
@@ -75,6 +87,8 @@ TestImgLoader = DataLoader(test_dataset, args.batch_size, shuffle=False, num_wor
 
 # model, optimizer
 model = Net()
+if CUDA:
+    model = model.cuda()
 model_loss = mvs_loss
 optimizer = optim.Adam(model.parameters(), lr=args.lr, betas=(0.9, 0.999), weight_decay=args.wd)
 
@@ -174,7 +188,9 @@ def train_sample(sample, detailed_summary=False):
 
     depth_gt = sample["depth"]
     mask = sample["mask"]
-
+    # Add to cuda
+    if CUDA:
+        depth_gt, mask, sample["imgs"], sample["depth_values"] = depth_gt.cuda(), mask.cuda(), sample["imgs"].cuda(), sample["depth_values"].cuda()
     outputs = model(sample["imgs"], sample["proj_matrices"], sample["depth_values"])
     depth_est = outputs["depth"]
 
@@ -202,6 +218,11 @@ def test_sample(sample, detailed_summary=True):
 
     depth_gt = sample["depth"]
     mask = sample["mask"]
+
+    # Add to cuda
+    if CUDA:
+        depth_gt, mask, sample["imgs"], sample["depth_values"] = depth_gt.cuda(), mask.cuda(), sample["imgs"].cuda(), \
+                                                                 sample["depth_values"].cuda()
 
     outputs = model(sample["imgs"], sample["proj_matrices"], sample["depth_values"])
     depth_est = outputs["depth"]

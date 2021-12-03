@@ -1,4 +1,9 @@
 .idea/
 *.mat
 *.pyc
-
+**/__pycache__
+**/.idea
+**/checkpoints
+**/checkpoints/*
+**/outputs
+**/outputs/*
