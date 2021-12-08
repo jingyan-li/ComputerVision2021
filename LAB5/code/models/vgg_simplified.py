@@ -61,16 +61,6 @@ class Vgg(nn.Module):
             nn.Linear(in_features=fc_layer, out_features=classes)
         )
 
-        self.model = nn.Sequential(
-            self.conv_block1,
-            self.conv_block2,
-            self.conv_block3,
-            self.conv_block4,
-            self.conv_block5,
-            self.classifier
-        )
-
-
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
@@ -85,6 +75,13 @@ class Vgg(nn.Module):
         """
         score = None
         # todo
-        score = self.model(x)
+        bs, _,_,_ = x.size()
+        score = self.conv_block1(x)
+        score = self.conv_block2(score)
+        score = self.conv_block3(score)
+        score = self.conv_block4(score)
+        score = self.conv_block5(score)
+        score = score.view(bs, -1)
+        score = self.classifier(score)
         return score
 
