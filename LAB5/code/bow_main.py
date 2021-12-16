@@ -79,12 +79,11 @@ def descriptors_hog(img, vPoints, cellWidth, cellHeight):
                 # Extract gradients for the cell
                 grad_x_ = grad_x[cell_xs[x_]:cell_xs[x_+1], cell_ys[y_]:cell_ys[y_+1]]  # (cellheight, cellwidth)
                 grad_y_ = grad_y[cell_xs[x_]:cell_xs[x_+1], cell_ys[y_]:cell_ys[y_+1]]
-                # Calculate angle
-                theta = np.abs(np.degrees(np.arctan(grad_y_/grad_x_)))
-                # # Calculate magnitude
-                # miu = np.sqrt(np.power(grad_x_,2)+np.power(grad_y_,2))
+                # TODO Calculate angle [arctan2 0,360]
+                theta = np.degrees(np.arctan2(grad_y_, grad_x_))  # [-180,180]
+                theta = np.where(theta >= 0, theta, theta+360.)  # [0,360]
                 # Get index and value
-                delta_theta = 180./nBins
+                delta_theta = 360./nBins
                 value_j = np.floor(theta/delta_theta)
                 # Vj = (miu * (theta/delta_theta - 0.5))
                 # Vj_1 = (miu * (theta - delta_theta * (value_j + 0.5)) / delta_theta)
@@ -230,8 +229,8 @@ if __name__ == '__main__':
     nameDirNeg_test = 'data/data_bow/cars-testing-neg'
 
 
-    k = 4  # todo
-    numiter = 6  # todo
+    k = 13  # todo
+    numiter = 20  # todo
 
     print('creating codebook ...')
     vCenters = create_codebook(nameDirPos_train, nameDirNeg_train, k, numiter)
