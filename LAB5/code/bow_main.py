@@ -231,7 +231,7 @@ if __name__ == '__main__':
     nameDirNeg_test = 'data/data_bow/cars-testing-neg'
 
 
-    k = 13  # todo
+    k = 20  # todo
     numiter = 20  # todo
 
     print('creating codebook ...')
