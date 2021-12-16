@@ -69,16 +69,18 @@ def descriptors_hog(img, vPoints, cellWidth, cellHeight):
         x = vPoints[i][0]
         y = vPoints[i][1]
 
-        cell_xs = np.arange(x-2*h, x+2*h+1, h)  # shape (5,)
-        cell_ys = np.arange(y-2*w, y+2*w+1, w)
+        # cell_xs = np.arange(x-2*h, x+2*h+1, h)  # shape (5,)
+        # cell_ys = np.arange(y-2*w, y+2*w+1, w)
+        cell_xs = np.arange(x-2*h+2, x+2*h-1, h-1)  # shape (5,)
+        cell_ys = np.arange(y-2*w+2, y+2*w-1, w-1)
 
         for x_ in range(len(cell_xs)-1):
             for y_ in range(len(cell_ys)-1):
                 # For each cell, calculates its hog
                 hog = np.zeros(nBins)
                 # Extract gradients for the cell
-                grad_x_ = grad_x[cell_xs[x_]:cell_xs[x_+1], cell_ys[y_]:cell_ys[y_+1]]  # (cellheight, cellwidth)
-                grad_y_ = grad_y[cell_xs[x_]:cell_xs[x_+1], cell_ys[y_]:cell_ys[y_+1]]
+                grad_x_ = grad_x[cell_xs[x_]:cell_xs[x_]+h, cell_ys[y_]:cell_ys[y_]+h]  # (cellheight, cellwidth)
+                grad_y_ = grad_y[cell_xs[x_]:cell_xs[x_]+h, cell_ys[y_]:cell_ys[y_]+h]
                 # TODO Calculate angle [arctan2 0,360]
                 theta = np.degrees(np.arctan2(grad_y_, grad_x_))  # [-180,180]
                 theta = np.where(theta >= 0, theta, theta+360.)  # [0,360]
