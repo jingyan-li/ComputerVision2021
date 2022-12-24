@@ -12,6 +12,9 @@ from resample import resample
 from estimate import estimate
 
 
+import matplotlib as mpl
+mpl.use('Qt5Agg')  # interactive mode works with this, pick one
+
 top_left = []
 bottom_right = []
 
@@ -57,7 +60,7 @@ def condensation_tracker(video_path, params):
         last_frame = 42
     elif video_name == "video2.avi":
         first_frame = 3
-        last_frame = 40
+        last_frame = 38
     elif video_name == "video3.avi":
         first_frame = 1
         last_frame = 60
@@ -216,16 +219,16 @@ def condensation_tracker(video_path, params):
 
 
 if __name__ == "__main__":
-    video_name = 'video3.avi'
+    video_name = 'video2.avi'
     params = {
         "draw_plots": 1,
-        "hist_bin": 16,
-        "alpha": 0,
-        "sigma_observe": 0.1,
+        "hist_bin": 16,  # 16
+        "alpha": 0,  # 0.75
+        "sigma_observe": 0.1,  # 0.1
         "model": 0,
-        "num_particles": 300,
-        "sigma_position": 15,
-        "sigma_velocity": 1,
-        "initial_velocity": (1, 10)
+        "num_particles": 300,  # 300
+        "sigma_position": 15,  # 15
+        "sigma_velocity": 1,   # 1
+        "initial_velocity": (1, 10)  # (1,10)
     }
     condensation_tracker(video_name, params)
