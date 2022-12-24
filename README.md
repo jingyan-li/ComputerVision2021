@@ -8,8 +8,8 @@
 
 - Lab 4: Multi-view Stereo
 
-- Lab 5:
+- Lab 5: Image classification through Bag-of-words & CNN
 
-- Lab 6: 
+- Lab 6: Tracking
 
  
