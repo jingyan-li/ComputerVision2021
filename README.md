@@ -4,8 +4,12 @@
 
 - Lab 2: Mean shift
 
-- Lab 3: Structure from Motion
+- Lab 3: Calibration & Structure from Motion
 
-- Lab 4: 
+- Lab 4: Multi-view Stereo
+
+- Lab 5:
+
+- Lab 6: 
 
  
