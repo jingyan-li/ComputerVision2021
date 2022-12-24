@@ -2,6 +2,10 @@
 
 - Lab 1: Classification
 
-- Lab 2:
+- Lab 2: Mean shift
+
+- Lab 3: Structure from Motion
+
+- Lab 4: 
 
  
